@@ -1,0 +1,3 @@
+python/.dbdata/mysql/*
+python/.dbdata/sys/*
+python/.dbdata/performance_schema/*
