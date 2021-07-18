@@ -3,6 +3,7 @@ using strategy.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace strategy.BLL
 {    
@@ -24,6 +25,20 @@ namespace strategy.BLL
             using AccountContext context = new();
             List<AccountId> accs = context.AccountIds.FromSqlRaw("EXECUTE Account_GetIdByEmail {0}", email).ToList();
             return accs;
+        }
+        
+        public void ActiveBy(string email, string activeValue)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(activeValue))
+                return;
+
+            var parameters = new[] {
+                new SqlParameter("Email", email),
+                new SqlParameter("ActiveValue", activeValue)
+            };
+            
+            using AccountContext context = new();
+            context.Database.ExecuteSqlRaw("EXEC [dbo].[Account_ActiveValue] @Email, @ActiveValue", parameters);
         }
 
         public AccountBO Get()

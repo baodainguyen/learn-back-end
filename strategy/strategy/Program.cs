@@ -32,8 +32,10 @@ namespace strategy
         private static void Querying()
         {
             var acBO = new AccountBO();
-            var accs = acBO.GetAllByProject();
-            var accId = acBO.GetInfoBy("cwordesworth1i@oracle.com");
+            //var accs = acBO.GetAllByProject();
+
+            acBO.ActiveBy("psalazar0@usgs.gov", "37000-101");
+            var accId = acBO.GetInfoBy("wendecott1@wikispaces.com");
         }
     }
 }
