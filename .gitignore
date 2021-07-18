@@ -1,3 +1,5 @@
 python/.dbdata/mysql/*
 python/.dbdata/sys/*
 python/.dbdata/performance_schema/*
+strategy/strategy/bin/*
+strategy/strategy/obj/*
