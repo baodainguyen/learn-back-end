@@ -4,7 +4,7 @@ using strategy.Models;
 
 namespace strategy.DAL
 {
-    public class AccountContext : DbContext
+    public partial class AccountContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -264,9 +264,9 @@ namespace strategy.DAL
                     .HasConstraintName("FK_SubMarketProductAccount_SubMarketProduct");
             });
 
-            //OnModelCreatingPartial(modelBuilder);
+            OnModelCreatingPartial(modelBuilder);
         }
 
-        //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

@@ -15,7 +15,7 @@ namespace strategy
         public static void Main(string[] args)
         {
             
-            Querying();
+            //Querying();
 
             CreateHostBuilder(args).Build().Run();
 

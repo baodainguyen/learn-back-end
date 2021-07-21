@@ -64,4 +64,5 @@ namespace strategy.Models
     {
         public long Id { get; set; }
     }
+
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using strategy.Common;
 
 namespace strategy.BLL
 {    
@@ -15,15 +16,18 @@ namespace strategy.BLL
         public List<AccountProject> GetAllByProject()
         {
             using AccountContext context = new();
-            List<AccountProject> accs = context.AccountProjects.FromSqlRaw("EXECUTE Account_GetAllByProject").ToList();
+            List<AccountProject> accs = context.AccountProjects.ExcuteToList("Account_GetAllByProject");
             return accs;
         }
         
         public List<AccountId> GetInfoBy(string email)
         {
             if (string.IsNullOrEmpty(email)) return new List<AccountId>();
+            var parameters = new[] {
+                new SqlParameter("Email", email)
+            };
             using AccountContext context = new();
-            List<AccountId> accs = context.AccountIds.FromSqlRaw("EXECUTE Account_GetIdByEmail {0}", email).ToList();
+            List<AccountId> accs = context.AccountIds.ExcuteToList("Account_GetIdByEmail", parameters);
             return accs;
         }
         
@@ -38,7 +42,7 @@ namespace strategy.BLL
             };
             
             using AccountContext context = new();
-            context.Database.ExecuteSqlRaw("EXEC [dbo].[Account_ActiveValue] @Email, @ActiveValue", parameters);
+            context.ExcuteScalar("Account_ActiveValue", parameters);
         }
 
         public AccountBO Get()

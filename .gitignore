@@ -3,3 +3,4 @@ python/.dbdata/sys/*
 python/.dbdata/performance_schema/*
 strategy/strategy/bin/*
 strategy/strategy/obj/*
+dotnet/EcmaAPI/.vs/EcmaAPI/v16/.suo
