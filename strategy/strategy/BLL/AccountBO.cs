@@ -31,10 +31,11 @@ namespace strategy.BLL
             return accs;
         }
         
-        public void ActiveBy(string email, string activeValue)
+        public int ActiveBy(string email, string activeValue)
         {
+            int rowIndex = -1;
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(activeValue))
-                return;
+                return rowIndex;
 
             var parameters = new[] {
                 new SqlParameter("Email", email),
@@ -43,6 +44,9 @@ namespace strategy.BLL
             
             using AccountContext context = new();
             context.ExcuteScalar("Account_ActiveValue", parameters);
+
+            rowIndex = 0;
+            return rowIndex;
         }
 
         public AccountBO Get()

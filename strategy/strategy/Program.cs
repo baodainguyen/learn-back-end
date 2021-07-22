@@ -15,7 +15,7 @@ namespace strategy
         public static void Main(string[] args)
         {
             
-            //Querying();
+           // Querying();
 
             CreateHostBuilder(args).Build().Run();
 
@@ -34,7 +34,7 @@ namespace strategy
             var acBO = new AccountBO();
             //var accs = acBO.GetAllByProject();
 
-            acBO.ActiveBy("psalazar0@usgs.gov", "37000-101");
+            acBO.ActiveBy("psalazar0@usgs.gov", "dainb");
             var accId = acBO.GetInfoBy("wendecott1@wikispaces.com");
         }
     }

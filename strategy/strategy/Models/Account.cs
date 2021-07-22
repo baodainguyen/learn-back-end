@@ -52,6 +52,12 @@ namespace strategy.Models
         public virtual ICollection<SubMarketProductAccount> SubMarketProductAccounts { get; set; }
     }
 
+    public class AccountActive
+    {
+        public string Email { get; set; }
+        public string ActiveValue { get; set; }
+    }
+
     public class AccountProject
     {
         public long Id { get; set; }

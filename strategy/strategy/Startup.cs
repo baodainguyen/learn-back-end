@@ -25,7 +25,7 @@ namespace strategy
         {
             //services.AddDbContextPool<AccountContext>(opt =>
             //    opt.UseSqlServer(Configuration.GetConnectionString("ConnectStr")));
-
+            
             services.AddCors(c =>
             {
                 c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
@@ -34,7 +34,7 @@ namespace strategy
             services.AddControllers()
                 .AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             
         }
 
@@ -51,7 +51,7 @@ namespace strategy
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -59,7 +59,10 @@ namespace strategy
                 {
                     await context.Response.WriteAsync("Hello World!");
                 });
-                endpoints.MapControllers();
+                //endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "account",
+                    pattern: "{controller=Account}/{action}/{id?}");
             });
         }
     }
