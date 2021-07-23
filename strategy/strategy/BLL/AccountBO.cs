@@ -8,11 +8,8 @@ using strategy.Common;
 
 namespace strategy.BLL
 {    
-    public class AccountBO
-    {
-        
-        private List<Account> Accounts = new List<Account>();
-
+    public class AccountBO : BaseBO<AccountContext, Account>
+    {  
         public List<AccountProject> GetAllByProject()
         {
             using AccountContext context = new();
@@ -49,58 +46,16 @@ namespace strategy.BLL
             return rowIndex;
         }
 
-        public AccountBO Get()
+
+        public List<Account> GetAllActive()
         {
-            using (AccountContext context = new())
-            {
-                Accounts = context.Accounts.Where(a => a.DeletedBy == 0).ToList();
-            }
-            return this;
+            return GetAll().Where(a => a.IsActived).ToList();
         }
 
-        public List<Account> All()
+        public Account GetById(long id)
         {
-            return Accounts;
+            return GetAll().Where(a => a.Id == id).FirstOrDefault();
         }
 
-        public List<Account> AllActive()
-        {
-            return Accounts.Where(a => a.IsActived).ToList();
-        }
-
-        public Account ById(long id)
-        {
-            return Accounts.Where(a => a.Id == id).FirstOrDefault();
-        }
-
-        public void Update(Account item)
-        {
-            using AccountContext context = new();
-            context.Update<Account>(item);
-            context.SaveChanges();
-        }
-        public void Delete(Account item, long accountId)
-        {
-            // TODO: check Role
-
-            item.DeletedBy = accountId;
-
-            using AccountContext context = new();
-            context.Update<Account>(item);
-            context.SaveChanges();
-        }
-        public void Add(Account item)
-        {
-            using AccountContext context = new();
-            context.Accounts.AddAsync(item);
-            context.SaveChangesAsync();
-        }
-
-        public void AddRange(List<Account> items)
-        {
-            using AccountContext context = new();
-            context.AddRange(items);
-            context.SaveChanges();
-        }
     }
 }

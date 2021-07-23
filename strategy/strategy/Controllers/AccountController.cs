@@ -40,7 +40,7 @@ namespace strategy.Controllers
         {
             return mAccountBO.GetAllByProject().FirstOrDefault(e => e.Id == id);
         }
-
+        
         // GET: account/getinfoby
         [HttpGet]
         public IEnumerable<AccountProject> GetInfoBy([FromBody] AccountActive account)

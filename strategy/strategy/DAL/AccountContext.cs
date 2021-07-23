@@ -4,21 +4,14 @@ using strategy.Models;
 
 namespace strategy.DAL
 {
-    public partial class AccountContext : DbContext
+    public partial class AccountContext : BaseContext<Account>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(Global.ConnectStr);
-            }
-        }
-
+        
         public AccountContext(DbContextOptions options) : base(options)
         {
         }
 
-        public AccountContext() { }
+        public AccountContext() : base() { }
 
         public virtual DbSet<AccountId> AccountIds { get; set; }
         public virtual DbSet<AccountProject> AccountProjects { get; set; }
@@ -264,9 +257,10 @@ namespace strategy.DAL
                     .HasConstraintName("FK_SubMarketProductAccount_SubMarketProduct");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+            //OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
