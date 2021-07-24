@@ -4,9 +4,8 @@ using strategy.Common;
 
 namespace strategy.DAL
 {
-    public partial class BaseContext<T>: DbContext where T: class
+    public partial class BaseContext: DbContext
     {
-        public virtual DbSet<T> DbSets { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

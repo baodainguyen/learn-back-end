@@ -1,50 +1,43 @@
-﻿using strategy.DAL;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using strategy.Common;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace strategy.BLL
 {
-    public class BaseBO<C, T> 
-        where C : BaseContext<T>
-        where T : class
-    {   
-        public List<T> GetAll()
+    public class BaseBO
+    {
+
+        public int Update<C, T>(C context, T item)
+            where C : DbContext
+            where T : class
         {
-            var datas = new List<T>();
-            using (var c = new BaseContext<T>())
-            {
-                datas = c.DbSets.ToList();
-            }
-            return datas;
+            context.Update(item);
+            return context.SaveChanges();
+
         }
 
-        public int Update(T item)
+        public int ExecScalar<C>(C context, string storedStr, SqlParameter[] parameters = null)
+            where C : DbContext
         {
-            using var c = new BaseContext<T>();
-            c.Update(item);
-            return c.SaveChanges();
+            string store = storedStr.ToExecString(parameters);
+            return context.Database.ExecuteSqlRaw(store, parameters);
+            //context.Database.ExecuteSqlRaw("EXEC [dbo].[Account_ActiveValue] @Email, @ActiveValue", parameters);
         }
-        public int Delete(T item)
+        public List<T> ExcuteToList<T>(DbSet<T> dbSet, string storedStr, SqlParameter[] parameters = null) 
+            where T : class
         {
-            // TODO: check Role
-            using var c = new BaseContext<T>();
-            c.Remove(item);
-            return c.SaveChanges();
-        }
-        public int Add(T item)
-        {
-            using var c = new BaseContext<T>();
-            c.DbSets.Add(item);
-            //c.Add<T>(item);
-            return c.SaveChanges();
-        }
+            string store = storedStr.ToExecuteString(parameters);
+            IEnumerable<T> datasOut;
+            if (parameters != null)
+                datasOut = dbSet.FromSqlRaw(store, parameters).AsEnumerable<T>();
+            else
+                datasOut = dbSet.FromSqlRaw(store).AsEnumerable<T>();
 
-        public void AddRange(List<T> items)
-        {
-            using var c = new BaseContext<T>();
-            c.DbSets.AddRange(items);
-            //c.AddRange(items);
-            c.SaveChanges();
+            return datasOut.ToList();
+            //List<AccountProject> accs = context.AccountProjects.FromSqlRaw("EXECUTE Account_GetAllByProject").ToList();
+            //List<AccountId> accs = context.AccountIds.FromSqlRaw("EXECUTE Account_GetIdByEmail {0}", email).ToList();
         }
     }
 }

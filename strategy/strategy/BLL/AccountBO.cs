@@ -5,15 +5,19 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using strategy.Common;
+using System;
 
 namespace strategy.BLL
 {    
-    public class AccountBO : BaseBO<AccountContext, Account>
-    {  
+    public class AccountBO : BaseBO
+    {
+
+        #region Stored Procedures
         public List<AccountProject> GetAllByProject()
         {
             using AccountContext context = new();
-            List<AccountProject> accs = context.AccountProjects.ExcuteToList("Account_GetAllByProject");
+            List<AccountProject> accs = ExcuteToList(context.AccountProjects, "Account_GetAllByProject");
+
             return accs;
         }
         
@@ -24,7 +28,8 @@ namespace strategy.BLL
                 new SqlParameter("Email", email)
             };
             using AccountContext context = new();
-            List<AccountId> accs = context.AccountIds.ExcuteToList("Account_GetIdByEmail", parameters);
+            List<AccountId> accs = ExcuteToList(context.AccountIds, "Account_GetIdByEmail", parameters);
+            
             return accs;
         }
         
@@ -40,12 +45,39 @@ namespace strategy.BLL
             };
             
             using AccountContext context = new();
-            context.ExcuteScalar("Account_ActiveValue", parameters);
+            ExecScalar(context, "Account_ActiveValue", parameters);
+
+            rowIndex = 0;
+            return rowIndex;
+        }
+        public int UpdatePassword(AccountPass acc)
+        {
+            long id = acc.Id; 
+            string pass = acc.Password;
+            int rowIndex = -1;
+            if (id < 1 || string.IsNullOrEmpty(pass))
+                return rowIndex;
+
+            var parameters = new[] {
+                new SqlParameter("Id", id),
+                new SqlParameter("Password", pass)
+            };
+            
+            using AccountContext context = new();
+            ExecScalar(context, "Account_ChangePassword", parameters);
 
             rowIndex = 0;
             return rowIndex;
         }
 
+        #endregion
+
+        #region EF Core
+        public List<Account> GetAll()
+        {
+            using AccountContext context = new();
+            return context.Accounts.ToList();
+        }
 
         public List<Account> GetAllActive()
         {
@@ -56,6 +88,48 @@ namespace strategy.BLL
         {
             return GetAll().Where(a => a.Id == id).FirstOrDefault();
         }
+        
+        public int Update(Account item, long accountId = 0)
+        {
+            if(accountId > 0) item.ModifiedBy = accountId;
+            item.ModifiedDate = DateTime.Now;
+            using AccountContext c = new();
+            {
+                return Update(c, item);
+            }
+            
+        }
+        public int Delete(Account item, long accountId)
+        {
+            item.DeletedBy = accountId;
+            item.DeletedDate = DateTime.Now;
+            // TODO: check Role
+            return Update(item);
+            //using AccountContext c = new();
+            //{
+            //    c.Remove(item);
+            //    return c.SaveChanges();
+            //}
+        }
+        public int Add(Account item)
+        {
+            using AccountContext c = new();
+            {
+                c.Accounts.Add(item);
+                return c.SaveChanges();
+            }
+            
+        }
 
+        public int AddRange(List<Account> items)
+        {
+            using AccountContext c = new();
+            {
+                c.Accounts.AddRange(items);
+                //c.AddRange(items);
+                return c.SaveChanges();
+            }
+        }
+        #endregion
     }
 }

@@ -4,9 +4,8 @@ using strategy.Models;
 
 namespace strategy.DAL
 {
-    public partial class AccountContext : BaseContext<Account>
-    {
-        
+    public partial class AccountContext : BaseContext
+    {        
         public AccountContext(DbContextOptions options) : base(options)
         {
         }

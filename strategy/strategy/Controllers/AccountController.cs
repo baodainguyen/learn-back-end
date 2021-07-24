@@ -29,6 +29,15 @@ namespace strategy.Controllers
             return View();
         }
 
+
+
+        #region Stored Procedures
+        [HttpPut]
+        public int ChangePass([FromBody] AccountPass acc)
+        {
+            return mAccountBO.UpdatePassword(acc);
+        }
+
         [HttpGet]
         public IEnumerable<AccountProject> Get()
         {
@@ -62,5 +71,21 @@ namespace strategy.Controllers
             string activeValue = account.ActiveValue;
             return mAccountBO.ActiveBy(email, activeValue);
         }
+
+        #endregion
+
+        #region EF Core
+        [HttpPut]
+        public int Update(Account item)
+        {
+            return mAccountBO.Update(item, 1);
+        }
+
+        [HttpGet("{id}")]
+        public Account GetBy(long id)
+        {
+            return mAccountBO.GetById(id);
+        }
+        #endregion
     }
 }
