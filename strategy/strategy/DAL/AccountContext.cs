@@ -6,11 +6,9 @@ namespace strategy.DAL
 {
     public partial class AccountContext : BaseContext
     {        
-        public AccountContext(DbContextOptions options) : base(options)
-        {
-        }
-
-        public AccountContext() : base() { }
+        public AccountContext(DbContextOptions<AccountContext> options) : base(options) { }
+        //public AccountContext(DbContextOptions options) : base(options) { }
+        
 
         public virtual DbSet<AccountId> AccountIds { get; set; }
         public virtual DbSet<AccountProject> AccountProjects { get; set; }
@@ -258,6 +256,7 @@ namespace strategy.DAL
 
             base.OnModelCreating(modelBuilder);
             //OnModelCreatingPartial(modelBuilder);
+            ////modelBuilder.Entity<Account>().HasNoKey();
         }
 
         //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

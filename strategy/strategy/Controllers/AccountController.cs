@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using strategy.BLL;
+using strategy.Common;
 using strategy.DAL;
 using strategy.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace strategy.Controllers
 {
@@ -16,13 +15,14 @@ namespace strategy.Controllers
     public class AccountController : Controller //ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
+        private readonly AccountContext aContext;
 
-        public AccountController(ILogger<AccountController> logger)
+        public AccountController(ILogger<AccountController> logger, AccountContext context)
         {
             _logger = logger;
+            aContext = context;
         }
 
-        readonly AccountBO mAccountBO = new AccountBO();
 
         public IActionResult Index()
         {
@@ -31,60 +31,80 @@ namespace strategy.Controllers
 
 
 
-        #region Stored Procedures
-        [HttpPut]
-        public int ChangePass([FromBody] AccountPass acc)
-        {
-            return mAccountBO.UpdatePassword(acc);
-        }
 
-        [HttpGet]
+        #region Stored Procedures
+        [HttpGet]       // GET: account/get
         public IEnumerable<AccountProject> Get()
         {
-            return mAccountBO.GetAllByProject();
+            IEnumerable<AccountProject> datas = aContext.AccountProjects.ExcuteToList("Account_GetAllByProject");
+            return datas;
         }
 
-        [HttpGet("{id}")]
-        public AccountProject Get(long id)
+        [HttpPut]       // PUT: account/changepass
+        public int ChangePass([FromBody] AccountPass acc)
         {
-            return mAccountBO.GetAllByProject().FirstOrDefault(e => e.Id == id);
+            long id = acc.Id;
+            string pass = acc.Password;
+            int rowIndex = -1;
+            if (id < 1 || string.IsNullOrEmpty(pass))
+                return rowIndex;
+
+            var parameters = new[] {
+                    new SqlParameter("Id", id),
+                    new SqlParameter("Password", pass)
+                };
+
+            aContext.ExecScalar("Account_ChangePassword", parameters);
+
+            rowIndex = 0;
+            return rowIndex;
         }
         
-        // GET: account/getinfoby
-        [HttpGet]
+        [HttpGet]       // GET: account/getinfoby
         public IEnumerable<AccountProject> GetInfoBy([FromBody] AccountActive account)
         {
             string email = account.Email;
-            List<AccountId> accIds = mAccountBO.GetInfoBy(email);
-            IEnumerable<AccountProject> accPrjs = mAccountBO.GetAllByProject();
+            IEnumerable<AccountProject> datas = new List<AccountProject>();
+            if (string.IsNullOrEmpty(email)) return datas;
+            IEnumerable<AccountId> accIds = new List<AccountId>();
+            var parameters = new[] {
+                new SqlParameter("Email", email)
+            };
+            accIds = aContext.AccountIds.ExcuteToList("Account_GetIdByEmail", parameters);
+
+            IEnumerable<AccountProject> accPrjs = Get();
             return accPrjs.Join(accIds,
                                 prj => prj.Id,
                                 acc => acc.Id,
                                 (prj, acc) => prj);
         }
 
-        // GET: account/activeby
-        [HttpGet]
-        public int ActiveBy([FromBody] AccountActive account)
-        {
-            string email = account.Email;
-            string activeValue = account.ActiveValue;
-            return mAccountBO.ActiveBy(email, activeValue);
-        }
-
         #endregion
 
         #region EF Core
-        [HttpPut]
+        [HttpPost]      // GET: account/create
+        public int Create(Account item)
+        {
+            aContext.Add(item);
+            return aContext.SaveChanges();
+        }
+        [HttpPut]      // PUT: account/update
         public int Update(Account item)
         {
-            return mAccountBO.Update(item, 1);
+            item.ModifiedBy = 1;
+            item.ModifiedDate = DateTime.Now;
+            aContext.Update(item);
+            return aContext.SaveChanges();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")]      // GET: account/getby
         public Account GetBy(long id)
         {
-            return mAccountBO.GetById(id);
+            Account acc = aContext.Accounts.Where(a => a.Id == id).FirstOrDefault();
+            if (acc == null) 
+                return new Account();
+
+            return acc;
         }
         #endregion
     }

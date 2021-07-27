@@ -15,8 +15,6 @@ namespace strategy
         public static void Main(string[] args)
         {
             
-           // Querying();
-
             CreateHostBuilder(args).Build().Run();
 
         }
@@ -29,13 +27,6 @@ namespace strategy
                 });
 
         
-        private static void Querying()
-        {
-            var acBO = new AccountBO();
-            //var accs = acBO.GetAllByProject();
-
-            acBO.ActiveBy("psalazar0@usgs.gov", "dainb");
-            var accId = acBO.GetInfoBy("wendecott1@wikispaces.com");
-        }
+       
     }
 }
