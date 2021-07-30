@@ -21,12 +21,13 @@ namespace strategy.BLL
             this.context = context;
         }
 
+        
         public ProjectGroupMemberRole GetMemberByProjectGroupId(long projectGroupId, long accountId)
         {
             var sqlParams = new[] {
-                    new SqlParameter("projectGroupId", projectGroupId)
+                    new SqlParameter("@projectGroupId", projectGroupId)
                 };
-            List<ProjectGroupMember> groupPrjs = context.ProjectGroupGetMembers.ExcuteToList("ProjectGroup_GetMemberById", sqlParams)
+            var groupPrjs = context.ExecToList<ProjectGroupGetMember, ProjectGroupContext>("ProjectGroup_GetMemberById", sqlParams)
                     .Select(p => {
                         ProjectGroupMember projectGroupMember = new ProjectGroupMember(p);
                         projectGroupMember.RowState = DataRowState.Unchanged;
@@ -44,8 +45,8 @@ namespace strategy.BLL
         public int GetCurrentRole(long projectGroupId, long accountId)
         {
             var sqlParams = new[] {
-                    new SqlParameter("AccountId", accountId),
-                    new SqlParameter("ProjectGroupId", projectGroupId)
+                    new SqlParameter("@AccountId", accountId),
+                    new SqlParameter("@ProjectGroupId", projectGroupId)
                 };
             return context.ExecScalar("AccountRole_GetCurrentRoleWithGroup", sqlParams);
         }
@@ -57,12 +58,12 @@ namespace strategy.BLL
             var projectLastActions = GetProjectLasctAction(accountId);
 
             var parameters = new[] {
-                new SqlParameter("accountId", accountId)
+                new SqlParameter("@accountId", accountId)
             };
-            List<ProjectGetByMemberWithGroup> groupPrjs = context.ProjectGetByMemberWithGroups.ExcuteToList("Project_GetByMemberWithGroup", parameters).ToList();
+            var groupPrjs = context.ExecToList<ProjectGetByMemberWithGroup, ProjectGroupContext>("Project_GetByMemberWithGroup", parameters).ToList();
             
             IEnumerable<ProjectGroupObj> res = groupPrjs.GroupBy(t => t.ProjectGroupId)
-                .Select(t => GetProjectGroup(t, accountId, projectLastActions)).ToList();
+                .Select(t => GetProjectGroup(t, projectLastActions)).ToList();
             
             return res;
         }
@@ -70,16 +71,16 @@ namespace strategy.BLL
         private Dictionary<long ,long> GetProjectLasctAction(long accountId)
         {
             var parameters = new[] {
-                new SqlParameter("AccountId", accountId)
+                new SqlParameter("@AccountId", accountId)
             };
-            IEnumerable<AccountLastAct> actions = context.LastAccountActions.ExcuteToList("AccountLastAction_GetActions", parameters);
+            var actions = context.ExecToList<AccountLastAct, ProjectGroupContext>("AccountLastAction_GetActions", parameters);
             var als = actions.Where(t => t.CodeLastActionId == (int)ECodeLastAction.PROJECT_MODULE).DistinctBy(t => t.ProjectId);
             Dictionary<long, long> projectLastActions = als.ToDictionary(t => t.ProjectId, d => long.Parse(d.Value));
 
             return projectLastActions;
         }
 
-        private ProjectGroupObj GetProjectGroup(IGrouping<long, ProjectGetByMemberWithGroup> grouping, long accountId, Dictionary<long, long> projectLastActions)
+        private ProjectGroupObj GetProjectGroup(IGrouping<long, ProjectGetByMemberWithGroup> grouping, Dictionary<long, long> projectLastActions)
         {
             var group = grouping.First();
             var projectGroupObj = new ProjectGroupObj
@@ -89,11 +90,11 @@ namespace strategy.BLL
                 Mdf = group.ProjectGroupMdf,
                 MIndex = group.ProjectGroupMIndex,
                 ListProject = grouping.Where(t => t.ProjectId != null && t.ProjectMdf != null && t.ProjectMIndex != null && t.StrategyId != null)
-                        .GroupBy(t => t.ProjectId.Value).Select(t => GetProject(t, accountId, projectLastActions)).ToList()
+                        .GroupBy(t => t.ProjectId.Value).Select(t => GetProject(t, projectLastActions)).ToList()
             };
             return projectGroupObj;
         }
-        private ProjectByMember GetProject(IGrouping<long, ProjectGetByMemberWithGroup> grouping, long accountId, Dictionary<long, long> projectLastActions)
+        private ProjectByMember GetProject(IGrouping<long, ProjectGetByMemberWithGroup> grouping, Dictionary<long, long> projectLastActions)
         {
             var projectInfo = grouping.First();
 

@@ -11,11 +11,6 @@ namespace strategy.DAL
         {
         }
 
-        public virtual DbSet<ProjectGroupGetMember> ProjectGroupGetMembers { get; set; }
-        public virtual DbSet<ProjectGetByMemberWithGroup> ProjectGetByMemberWithGroups { get; set; }
-        public virtual DbSet<AccountLastAct> LastAccountActions { get; set; }
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");

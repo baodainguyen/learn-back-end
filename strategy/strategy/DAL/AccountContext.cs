@@ -2,6 +2,7 @@
 using strategy.Common;
 using strategy.DbModels;
 using strategy.Models;
+using strategy.StoredModels;
 
 namespace strategy.DAL
 {
@@ -20,6 +21,20 @@ namespace strategy.DAL
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<AccountInfo>(entity =>
+            {
+                entity.Property(e => e.Email);
+                entity.Property(e => e.FirstName);
+                entity.Property(e => e.LastName);
+                entity.Property(e => e.Firm);
+                entity.Property(e => e.Department);
+                entity.Property(e => e.MobilePhone);
+                entity.Property(e => e.HomePhone);
+                entity.Property(e => e.Greeting);
+                entity.Property(e => e.SigningOff);
+                
+                entity.HasNoKey();
+            });
 
             modelBuilder.Entity<Account>(entity =>
             {

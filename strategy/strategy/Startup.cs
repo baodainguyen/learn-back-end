@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using strategy.DAL;
-using strategy.DbModels;
+
 
 namespace strategy
 {
@@ -25,12 +25,10 @@ namespace strategy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AccountContext>(opt =>
-                //opt.UseSqlServer(Configuration.GetConnectionString("DConnStr"))
-                opt.UseSqlServer(Configuration.GetConnectionString("connectInfo"))
-                );
+                opt.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
+
             services.AddDbContext<ProjectGroupContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("connectInfo"))
-                );
+                opt.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
             
 
             services.AddCors(c =>

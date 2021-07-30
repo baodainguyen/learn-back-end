@@ -6,7 +6,7 @@ namespace strategy.DAL
 {
     public partial class BaseContext: DbContext
     {
-        public virtual DbSet<AccountLastAction> AccountLastActions { get; set; }
+        //public virtual DbSet<AccountLastAction> AccountLastActions { get; set; }
 
         public BaseContext(DbContextOptions options) : base(options) { }
         
