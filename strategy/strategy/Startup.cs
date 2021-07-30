@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using strategy.DAL;
+using strategy.DbModels;
 
 namespace strategy
 {
@@ -23,9 +24,13 @@ namespace strategy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddDbContext<AccountContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("DConnStr")));
+                //opt.UseSqlServer(Configuration.GetConnectionString("DConnStr"))
+                opt.UseSqlServer(Configuration.GetConnectionString("connectInfo"))
+                );
+            services.AddDbContext<ProjectGroupContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("connectInfo"))
+                );
             
 
             services.AddCors(c =>

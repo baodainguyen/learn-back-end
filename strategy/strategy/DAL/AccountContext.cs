@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using strategy.Common;
+using strategy.DbModels;
 using strategy.Models;
 
 namespace strategy.DAL
@@ -7,27 +8,27 @@ namespace strategy.DAL
     public partial class AccountContext : BaseContext
     {        
         public AccountContext(DbContextOptions<AccountContext> options) : base(options) { }
-        //public AccountContext(DbContextOptions options) : base(options) { }
         
-
         public virtual DbSet<AccountId> AccountIds { get; set; }
         public virtual DbSet<AccountProject> AccountProjects { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AccountCrmRole> AccountCrmRoles { get; set; }
-        public virtual DbSet<AccountLastAction> AccountLastActions { get; set; }
+        
         public virtual DbSet<AccountRole> AccountRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-            
+
+
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.ToTable("Account");
 
                 entity.Property(e => e.ActiveInviteValue).HasMaxLength(100);
 
-                entity.Property(e => e.ActiveValue).IsRequired()
+                entity.Property(e => e.ActiveValue)
+                    .IsRequired()
                     .HasMaxLength(100);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
@@ -38,28 +39,32 @@ namespace strategy.DAL
 
                 entity.Property(e => e.Department).HasMaxLength(250);
 
-                entity.Property(e => e.Email).IsRequired()
+                entity.Property(e => e.Email)
+                    .IsRequired()
                     .HasMaxLength(75);
 
                 entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Firm).HasMaxLength(250);
 
-                entity.Property(e => e.FirstName).IsRequired()
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.HomePhone).HasMaxLength(50);
 
                 entity.Property(e => e.LastLoginedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.LastName).IsRequired()
+                entity.Property(e => e.LastName)
+                    .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.MobilePhone).HasMaxLength(50);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Password).IsRequired()
+                entity.Property(e => e.Password)
+                    .IsRequired()
                     .HasMaxLength(500);
 
                 entity.Property(e => e.Theme).HasMaxLength(50);
@@ -78,15 +83,6 @@ namespace strategy.DAL
                 entity.Property(e => e.DeletedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<AccountLastAction>(entity =>
-            {
-                entity.ToTable("AccountLastAction");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Value).IsRequired();
             });
 
             modelBuilder.Entity<AccountRole>(entity =>
@@ -159,7 +155,8 @@ namespace strategy.DAL
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Name).IsRequired()
+                entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100);
 
                 entity.Property(e => e.TypeId).HasComment("2 org, 3 person, 4 activity");
@@ -190,7 +187,8 @@ namespace strategy.DAL
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Name).IsRequired()
+                entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100);
 
                 entity.HasOne(d => d.Account)
@@ -255,10 +253,8 @@ namespace strategy.DAL
             });
 
             base.OnModelCreating(modelBuilder);
-            //OnModelCreatingPartial(modelBuilder);
-            ////modelBuilder.Entity<Account>().HasNoKey();
+            
         }
 
-        //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,26 @@ namespace strategy.Common
 {
     public static class Extentions
     {
+        /// <summary>
+        /// Author: SONPT
+        /// Description: Distinct list objects by one field
+        /// </summary>
+        /// <typeparam name="T">Generic type</typeparam>
+        /// <typeparam name="TKey">a field of object</typeparam>
+        /// <param name="source"> some collection type</param>
+        /// <param name="keySelector">lamda expression to distinct</param>
+        /// <returns></returns>
+        public static IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (T element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
+        }
         public static int ExecScalar<C>(this C context, string storedStr, SqlParameter[] parameters = null)
            where C : DbContext
         {

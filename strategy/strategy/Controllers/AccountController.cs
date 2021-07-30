@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using strategy.Common;
 using strategy.DAL;
+using strategy.DbModels;
 using strategy.Models;
 using System;
 using System.Collections.Generic;
@@ -28,9 +29,6 @@ namespace strategy.Controllers
         {
             return View();
         }
-
-
-
 
         #region Stored Procedures
         [HttpGet]       // GET: account/get
@@ -59,7 +57,7 @@ namespace strategy.Controllers
             rowIndex = 0;
             return rowIndex;
         }
-        
+
         [HttpGet]       // GET: account/getinfoby
         public IEnumerable<AccountProject> GetInfoBy([FromBody] AccountActive account)
         {
@@ -101,7 +99,7 @@ namespace strategy.Controllers
         public Account GetBy(long id)
         {
             Account acc = aContext.Accounts.Where(a => a.Id == id).FirstOrDefault();
-            if (acc == null) 
+            if (acc == null)
                 return new Account();
 
             return acc;

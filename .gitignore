@@ -1,6 +1,9 @@
 python/.dbdata/mysql/*
 python/.dbdata/sys/*
 python/.dbdata/performance_schema/*
+dotnet/EcmaAPI/.vs/EcmaAPI/v16/.suo
+
 strategy/strategy/bin/*
 strategy/strategy/obj/*
-dotnet/EcmaAPI/.vs/EcmaAPI/v16/.suo
+strategy/strategy/Models/*
+strategy/strategy/appsettings.json
