@@ -1,37 +1,25 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using strategy.DbModels;
 using strategy.StoredModels;
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace strategy.DAL
 {
     public class CrmContext : BaseContext
     {
         public CrmContext(DbContextOptions<CrmContext> options) : base(options)
-        {
-        }
+        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            
-
             base.OnModelCreating(modelBuilder);
 
         }
 
-        private MethodInfo _methodInfo;
-        private MethodInfo GetDataMethod()
-        {
-            if (_methodInfo == null)
-                _methodInfo = GetType().GetMethod("GetData", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-            return _methodInfo;
-        }
-        public List<object> ExecuteToMultiObject(string pers, long projectId)
+        
+        public List<object> GetExportDataByPer(string pers, long projectId)
         {
             var sqlParams = new[]
             {
@@ -51,6 +39,32 @@ namespace strategy.DAL
             };
 
             return ExecuteToMultiObject(types, "CrmPerson_GetExportData", sqlParams);
+        }
+
+        public List<object> NewGetOrgExportData(string orgs, long projectId, bool isAll = false)
+        {
+            var sqlParams = new[]
+            {
+                new SqlParameter("@Orgs", orgs),
+                new SqlParameter("@ProjectId", projectId),
+                new SqlParameter("@IsAll", isAll)
+            };
+
+            var orgTypes = new[]
+            {
+                typeof(List<CrmOrganisationExport>),
+                typeof(List<StoredModels.CrmAddressView>),
+                typeof(List<StoredModels.CrmAddressView>),
+                typeof(List<StoredModels.CrmInformationView>),
+                typeof(List<StoredModels.CrmInformationView>),
+                typeof(List<StoredModels.CrmTagView>),
+                typeof(List<StoredModels.CrmOrganisationRelationship>),
+                typeof(List<StoredModels.CrmPersonRelationship>),
+                typeof(List<StoredModels.CrmPersonResponsibility>),
+                typeof(List<StoredModels.CrmOrganisationResponsibility>)
+            };
+
+            return ExecuteToMultiObject(orgTypes, "CrmOrganisation_GetExportDataNew", sqlParams);
         }
     }
 }

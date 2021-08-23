@@ -10,4 +10,9 @@ namespace strategy.StoredModels
         public string PersonIds { get; set; }
         public long ProjectId { get; set; }
     }
+    public class DataOrg
+    {
+        public string Ids { get; set; }
+        public long ProjectId { get; set; }
+    }
 }

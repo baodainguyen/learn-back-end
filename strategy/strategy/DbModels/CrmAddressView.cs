@@ -7,7 +7,7 @@ namespace strategy.DbModels
 {
     public partial class CrmAddressView
     {
-        public long CrmAddressId { get; set; }
+        public long CrmAddressId { get; set; }//
         public long? CatAddressId { get; set; }
         public long? CrmId { get; set; }
         public int? TypeId { get; set; }
@@ -18,10 +18,10 @@ namespace strategy.DbModels
         public string AdditionAddress { get; set; }
         public string Department { get; set; }
         public long? CrmLandId { get; set; }
-        public string CatAddressName { get; set; }
-        public int? Mindex { get; set; }
-        public int? CatAddressType { get; set; }
         public string CrmLandName { get; set; }
+        public string CatAddressName { get; set; }
+        public int? CatAddressType { get; set; }
+        public int? Mindex { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

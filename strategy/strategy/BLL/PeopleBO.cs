@@ -1,7 +1,6 @@
 ﻿using strategy.DAL;
 using strategy.StoredModels;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace strategy.BLL
 {
@@ -18,7 +17,7 @@ namespace strategy.BLL
             string pers = people.PersonIds;
             long projectId = people.ProjectId;
 
-            return context.ExecuteToMultiObject(pers, projectId);
+            return context.GetExportDataByPer(pers, projectId);
         }
         
     }

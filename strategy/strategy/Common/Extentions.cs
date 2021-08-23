@@ -1,10 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using strategy.StoredModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace strategy.Common
 {
@@ -28,7 +26,6 @@ namespace strategy.Common
 
 
         /// <summary>
-        /// Author: SONPT
         /// Description: Distinct list objects by one field
         /// </summary>
         /// <typeparam name="T">Generic type</typeparam>
