@@ -29,6 +29,8 @@ namespace strategy
 
             services.AddDbContext<ProjectGroupContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
+            services.AddDbContext<CrmContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
             
 
             services.AddCors(c =>
