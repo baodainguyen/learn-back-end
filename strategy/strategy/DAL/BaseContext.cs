@@ -83,7 +83,7 @@ namespace strategy.DAL
                     i++;
                 } while (i < types.Count && dataReader.NextResult());
             }
-           // Database.CloseConnection();
+            Database.CloseConnection();
             return res;
         }
         protected List<object> ExecuteToMultiObject(Type[] types, string queryString, params SqlParameter[] parameters)

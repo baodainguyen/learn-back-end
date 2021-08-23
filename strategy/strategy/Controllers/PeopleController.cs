@@ -30,7 +30,7 @@ namespace strategy.Controllers
             {
                 return new List<object>();
             }
-            return people.GetExportDataByPer(peopleId, typeof(PeopleController));
+            return people.GetExportDataByPer(peopleId);
         }
     }
 }
