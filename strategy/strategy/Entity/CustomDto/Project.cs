@@ -1,10 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using strategy.Common;
 using System.Threading.Tasks;
 
 namespace strategy.Entity.CustomDto
 {
+    public class CrmFilterItem
+    {
+        public int Operator { get; set; }
+        public int PropertyId { get; set; }
+        public int Keyword { get; set; }
+        public object Value { get; set; }
+        public object ValueSecond { get; set; }
+        public string ValueThird { get; set; } = string.Empty;
+        public int MIndex { get; set; }
+        public SettingType TypeCrowdFilter { get; set; }
+    }
+    public class CrmFilterData
+    {
+        public int TypeId { get; set; }
+        public List<CrmFilterItem> CrmFilterItems { get; set; }
+        public long IdFocus { get; set; }
+        public long IdFilter { get; set; }
+        public DateTime CreatedDate { get; set; }
+    }
     public class ProjectByMember
     {
         public long Id { get; set; }
