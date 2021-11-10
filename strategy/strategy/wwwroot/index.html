@@ -23,7 +23,8 @@
                 <p>Example: https://localhost:5001/organisation/getcrmpeople/lang=en&projid=62689 </p>
                 <br>
                 <p><strong>POST:</strong> https://localhost:5001/organisation/getexport/ </p>
-                <p>Params: string Ids, long ProjectId</p>
+                <p>
+                    Params: string Ids, long ProjectId</p>
                 <p>
                     Example:<code> { "Ids": "30118, 30119", "ProjectId" : 30339 }</code>
                 </p>
@@ -31,8 +32,12 @@
             <li>
                 <h3>PeopleController</h3>
                 <p><strong>POST:</strong> https://localhost:5001/people/getexport/ </p>
-                <p>Params: string Ids, long ProjectId</p>
-                <p>Example: https://localhost:5001/projectgroup/getmemberprojectgroup/1/1 </p>
+                <p>
+                    Params: string PersonIds, long ProjectId
+                </p>
+                <p>
+                    Example:<code> { "PersonIds": "30163, 30166", "ProjectId" : 30339 }</code>
+                </p>
             </li>
             <li>
                 <h3>ProjectGroupController</h3>
