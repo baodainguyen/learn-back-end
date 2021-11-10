@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Stratsigner API - .NET5</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <style>
+        body {font-family: 'Ubuntu', sans-serif;}
+    </style>
+</head>
+<body >
+    <div>
+        <ul>
+            <li>
+                <h3>AccountController</h3>
+                <p><strong>GET:</strong> https://localhost:5001/projectgroup/getuserforedit/accountId/projectGroupId/projectId </p>
+            </li>
+            <li>
+                <h3>OrganisationController</h3>
+                <p><strong>GET:</strong> https://localhost:5001/organisation/getcrmpeople/lang={Language}&projid={projectId} </p>
+                <p>Example: https://localhost:5001/organisation/getcrmpeople/lang=en&projid=62689 </p>
+                <br>
+                <p><strong>POST:</strong> https://localhost:5001/organisation/getexport/ </p>
+                <p>Params: string Ids, long ProjectId</p>
+                <p>
+                    Example:<code> { "Ids": "30118, 30119", "ProjectId" : 30339 }</code>
+                </p>
+            </li>
+            <li>
+                <h3>PeopleController</h3>
+                <p><strong>POST:</strong> https://localhost:5001/people/getexport/ </p>
+                <p>Params: string Ids, long ProjectId</p>
+                <p>Example: https://localhost:5001/projectgroup/getmemberprojectgroup/1/1 </p>
+            </li>
+            <li>
+                <h3>ProjectGroupController</h3>
+                <p><strong>GET:</strong> https://localhost:5001/projectgroup/getmemberprojectgroup/accountId/projectGroupId </p>
+                <p>Example: https://localhost:5001/projectgroup/getmemberprojectgroup/1/1 </p>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
