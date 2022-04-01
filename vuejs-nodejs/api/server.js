@@ -17,8 +17,12 @@ const workingDir = process.env.WORKING_DIR;
 app.use(express.static(process.cwd() + workingDir));
 
 app.get('/api/users', cors(getCorsOptions()), function (req, res, next) {
-  console.log('api/users called!!!!!!!', createToken('dainb', 'abc123'));
-  res.json(users);
+  const jwtKey = createToken('dainb', 'abc123');
+  console.log('api/users called!!!!!!!', jwtKey);
+  res.json({
+    key: jwtKey,
+    data: users
+  });
 });
 
 app.post('/api/user', cors(getCorsOptions()), (req, res) => {
@@ -37,6 +41,22 @@ app.listen(port, () => {
     console.log(`Server listening on the port::${port}`);
 });
 
+function getCorsOptions(){
+  return {
+    origin: 'http://localhost:8082',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+}
+function createToken(user, email) {
+  const token = jwt.sign(
+    { data: `user=${user}-email=${email}` },
+    process.env.TOKEN_KEY,
+    {
+      expiresIn: "5h", 
+    }
+  );
+  return token;
+}
 function getUsers() {
   return [
     {
@@ -58,20 +78,4 @@ function getUsers() {
       email: "abc@gmail.com"
     }
   ];
-}
-function getCorsOptions(){
-  return {
-    origin: 'http://localhost:8082',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
-}
-function createToken(user, email) {
-  const token = jwt.sign(
-    { user_id: user._id, email },
-    process.env.TOKEN_KEY,
-    {
-      expiresIn: "5h",
-    }
-  );
-  return token;
 }

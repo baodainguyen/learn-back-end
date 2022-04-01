@@ -42,7 +42,7 @@ export default {
     getAllUsers() {
       getAllUsers().then(response => {
         console.log(response)
-        this.users = response
+        this.users = response.data
         this.numberOfUsers = this.users.length
       })
     },

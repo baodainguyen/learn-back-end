@@ -1,7 +1,7 @@
 <template>
     <div class="display-board">
-        <h4>Users Created</h4>
-        <div class="number">
+        <h4 style="color:white;">Users Created</h4>
+        <div class="number" style="color:white;">
         {{numberOfUsers}}
         </div>
         <div class="btn">
