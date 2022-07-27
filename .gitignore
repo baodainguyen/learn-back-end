@@ -7,15 +7,11 @@ csharp/dotnet/EcmaAPI/bin/*
 csharp/dotnet/EcmaAPI/.vs/EcmaAPI/v16/.suo
 
 csharp/strategy/strategy/.vs
-csharp/strategy/strategy/.vs/*
-csharp/strategy/strategy/bin/*
-csharp/strategy/strategy/obj/*
+csharp/strategy/strategy/bin
+csharp/strategy/strategy/obj
 csharp/strategy/strategy/Models/*
 csharp/strategy/strategy/appsettings.json
 
 csharp/ConsoleDemoDotNetCore/.vs
-csharp/ConsoleDemoDotNetCore/.vs/*
 csharp/ConsoleDemoDotNetCore/ConsoleDemoDotNetCore/bin
-csharp/ConsoleDemoDotNetCore/ConsoleDemoDotNetCore/bin/*
 csharp/ConsoleDemoDotNetCore/ConsoleDemoDotNetCore/obj
-csharp/ConsoleDemoDotNetCore/ConsoleDemoDotNetCore/obj/*
