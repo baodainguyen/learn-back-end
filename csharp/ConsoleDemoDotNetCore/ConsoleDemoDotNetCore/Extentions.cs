@@ -17,7 +17,12 @@ namespace ConsoleDemoDotNetCore
             }
         }
 
-        // Ham nay copy cac propoties va function cua class
+        /* Ham nay copy cac propoties va function cua class
+         * Serialization is limiting (requires attributes, specific constructors, etc.) and is very slow (https://stackoverflow.com/questions/78536/deep-cloning-objects/78568#78568)
+         * BinaryFormatter requires the Serializable attribute, 
+         * JsonConverter requires a parameterless constructor or attributes, 
+         * neither handle read only fields or interfaces very well and both are 10-30x slower than necessary.
+         */
         public static T DeepCopy<T>(this T self)
         {
             var serialized = JsonConvert.SerializeObject(self);

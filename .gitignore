@@ -2,9 +2,9 @@ python/.dbdata/mysql/*
 python/.dbdata/sys/*
 python/.dbdata/performance_schema/*
 
-csharp/dotnet/EcmaAPI/.vs/*
-csharp/dotnet/EcmaAPI/bin/*
-csharp/dotnet/EcmaAPI/.vs/EcmaAPI/v16/.suo
+csharp/dotnet/EcmaAPI/.vs
+csharp/dotnet/EcmaAPI/bin
+csharp/dotnet/EcmaAPI/obj
 
 csharp/strategy/strategy/.vs
 csharp/strategy/strategy/bin

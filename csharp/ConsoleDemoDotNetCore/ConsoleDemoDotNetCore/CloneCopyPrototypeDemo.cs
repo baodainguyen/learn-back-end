@@ -22,6 +22,13 @@ namespace ConsoleDemoDotNetCore
             objBClone.SetProps("changed objectProp on cloneB1", "changed nestedPropD on cloneB1");
             objB.DeepPrintObject();
             objBClone.DeepPrintObject();
+
+
+            var myObj = new MyObject("originalC", new NestedObjectProp("nestedPropE", "nestedPropF"));
+            var myObjClone = myObj.DeepCopy();
+            myObjClone.SetProps("changed objectProp on cloneC1", "changed nestedPropD on cloneC1");
+            myObj.DeepPrintObject();
+            myObjClone.DeepPrintObject();
         }
     }
 
@@ -90,6 +97,46 @@ namespace ConsoleDemoDotNetCore
         public string NestedPropB { get; set; }
     }
 
+    //Implement an explicit DeepCopy interface
+    public interface IPrototype<T>
+    {
+        T DeepCopy();
+    }
+    public class MyObject : IPrototype<MyObject>, iDo
+    {
+        public string ObjectProp { get; set; }
+        public NestedObjectProp NestedObjectProp { get; set; }
+        public MyObject(string objectProp, NestedObjectProp nestedObjectProp)
+        {
+            ObjectProp = objectProp;
+            NestedObjectProp = nestedObjectProp;
+        }
+        public void SetProps(string objectProp, string NestedPropB)
+        {
+            ObjectProp = objectProp;
+            NestedObjectProp.NestedPropB = NestedPropB;
+        }
+        public MyObject DeepCopy()
+        {
+            return new MyObject(ObjectProp, NestedObjectProp.DeepCopy());
+        }
+    }
+    public class NestedObjectProp : IPrototype<NestedObjectProp>
+    {
+        public NestedObjectProp(string nestedPropA, string nestedPropB)
+        {
+            this.NestedPropB = nestedPropB;
+            this.NestedPropA = nestedPropA;
+        }
+        public string NestedPropA { get; set; }
+        public string NestedPropB { get; set; }
+
+        public NestedObjectProp DeepCopy()
+        {
+            return new NestedObjectProp(NestedPropA, NestedPropB);
+        }
+    }
+
     public static class CloneExtends
     {
         public static void DeepPrintObject<T>(this T obj)
@@ -109,6 +156,11 @@ namespace ConsoleDemoDotNetCore
                 {
                     Console.Write("  ");
                     ((ClassB1)value).PrintObject();
+                }
+                else if (typeof(NestedObjectProp).IsInstanceOfType(value))
+                {
+                    Console.Write("  ");
+                    ((NestedObjectProp)value).PrintObject();
                 }
                 else
                 {
